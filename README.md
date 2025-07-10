@@ -15,10 +15,8 @@ SensoHealth
 ├── firmware/
 │   ├── src/
 │   ├── firmware.ino / main.py
-│   └── platformio.ini
 ├── test_logs/
-│   ├── breathing_data.csv
-│   ├── drift_test_24h.csv
+│   ├── csv_files
 │   └── screenshots/
 └── demo/
     └── demo_video.mp4
