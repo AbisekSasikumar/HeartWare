@@ -1,0 +1,121 @@
+Timestamp (ms),Test Stage,Pressure (Pa),Altitude (m)
+0,Check pressure during elevation change,100823.0,41.88
+1000,Check pressure during elevation change,100820.68,42.07
+2000,Check pressure during elevation change,100823.99,41.79
+3000,Check pressure during elevation change,100821.72,41.98
+4000,Check pressure during elevation change,100822.88,41.89
+5000,Check pressure during elevation change,100825.27,41.69
+6000,Check pressure during elevation change,100821.42,42.01
+7000,Check pressure during elevation change,100822.93,41.88
+8000,Check pressure during elevation change,100821.16,42.03
+9000,Check pressure during elevation change,100822.6,41.91
+10000,Climbing stairs,100825.23,41.69
+11000,Climbing stairs,100822.74,41.9
+12000,Climbing stairs,100824.04,41.79
+13000,Climbing stairs,100824.25,41.77
+14000,Climbing stairs,100823.44,41.84
+15000,Climbing stairs,100822.34,41.93
+16000,Climbing stairs,100821.88,41.97
+17000,Climbing stairs,100824.41,41.76
+18000,Climbing stairs,100824.18,41.78
+19000,Climbing stairs,100829.18,41.36
+20000,Test indoor vs outdoor difference,100809.45,43.01
+21000,Test indoor vs outdoor difference,100814.54,42.58
+22000,Test indoor vs outdoor difference,100815.06,42.54
+23000,Test indoor vs outdoor difference,100817.04,42.38
+24000,Test indoor vs outdoor difference,100815.32,42.52
+25000,Test indoor vs outdoor difference,100812.63,42.74
+26000,Test indoor vs outdoor difference,100814.32,42.6
+27000,Test indoor vs outdoor difference,100815.4,42.51
+28000,Test indoor vs outdoor difference,100813.69,42.66
+29000,Test indoor vs outdoor difference,100815.86,42.47
+30000,Measure transition,100829.47,41.34
+31000,Measure transition,100836.66,40.74
+32000,Measure transition,100836.14,40.78
+33000,Measure transition,100832.53,41.08
+34000,Measure transition,100834.42,40.92
+35000,Measure transition,100833.3,41.02
+36000,Measure transition,100831.54,41.16
+37000,Measure transition,100833.38,41.01
+38000,Measure transition,100835.2,40.86
+39000,Measure transition,100832.44,41.09
+40000,Compare with GPS altitude,100815.28,42.52
+41000,Compare with GPS altitude,100815.88,42.47
+42000,Compare with GPS altitude,100816.9,42.39
+43000,Compare with GPS altitude,100818.59,42.25
+44000,Compare with GPS altitude,100814.76,42.57
+45000,Compare with GPS altitude,100817.05,42.38
+46000,Compare with GPS altitude,100816.47,42.42
+47000,Compare with GPS altitude,100812.32,42.77
+48000,Compare with GPS altitude,100815.19,42.53
+49000,Compare with GPS altitude,100815.77,42.48
+50000,Cross-check GPS,100820.71,42.07
+51000,Cross-check GPS,100821.44,42.01
+52000,Cross-check GPS,100816.71,42.4
+53000,Cross-check GPS,100820.88,42.05
+54000,Cross-check GPS,100819.44,42.18
+55000,Cross-check GPS,100817.91,42.3
+56000,Cross-check GPS,100821.84,41.97
+57000,Cross-check GPS,100822.26,41.94
+58000,Cross-check GPS,100819.48,42.17
+59000,Cross-check GPS,100822.48,41.92
+60000,Introduce temperature swing,100826.75,41.56
+61000,Introduce temperature swing,100827.65,41.49
+62000,Introduce temperature swing,100825.32,41.68
+63000,Introduce temperature swing,100830.68,41.24
+64000,Introduce temperature swing,100822.2,41.95
+65000,Introduce temperature swing,100827.33,41.52
+66000,Introduce temperature swing,100828.9,41.38
+67000,Introduce temperature swing,100823.45,41.84
+68000,Introduce temperature swing,100827.14,41.53
+69000,Introduce temperature swing,100827.36,41.51
+70000,Temperature change effect,100820.42,42.09
+71000,Temperature change effect,100821.27,42.02
+72000,Temperature change effect,100817.97,42.3
+73000,Temperature change effect,100816.0,42.46
+74000,Temperature change effect,100821.51,42.0
+75000,Temperature change effect,100821.21,42.03
+76000,Temperature change effect,100817.85,42.31
+77000,Temperature change effect,100819.48,42.17
+78000,Temperature change effect,100819.54,42.17
+79000,Temperature change effect,100819.91,42.14
+80000,Apply smoothing,100820.12,42.12
+81000,Apply smoothing,100822.52,41.92
+82000,Apply smoothing,100816.23,42.44
+83000,Apply smoothing,100821.79,41.98
+84000,Apply smoothing,100820.47,42.09
+85000,Apply smoothing,100819.28,42.19
+86000,Apply smoothing,100822.06,41.96
+87000,Apply smoothing,100815.02,42.54
+88000,Apply smoothing,100822.03,41.96
+89000,Apply smoothing,100820.48,42.09
+90000,Noise reduction via filter,100818.19,42.28
+91000,Noise reduction via filter,100821.32,42.02
+92000,Noise reduction via filter,100819.85,42.14
+93000,Noise reduction via filter,100825.63,41.66
+94000,Noise reduction via filter,100824.13,41.78
+95000,Noise reduction via filter,100821.34,42.02
+96000,Noise reduction via filter,100819.02,42.21
+97000,Noise reduction via filter,100819.29,42.19
+98000,Noise reduction via filter,100819.8,42.14
+99000,Noise reduction via filter,100819.33,42.18
+100000,Baseline calibration,100825.95,41.63
+101000,Baseline calibration,100826.58,41.58
+102000,Baseline calibration,100827.2,41.53
+103000,Baseline calibration,100826.72,41.57
+104000,Baseline calibration,100826.36,41.6
+105000,Baseline calibration,100825.9,41.64
+106000,Baseline calibration,100832.86,41.05
+107000,Baseline calibration,100824.81,41.73
+108000,Baseline calibration,100825.71,41.65
+109000,Baseline calibration,100828.62,41.41
+110000,Interpret with temperature,100835.81,40.81
+111000,Interpret with temperature,100837.31,40.68
+112000,Interpret with temperature,100838.06,40.62
+113000,Interpret with temperature,100838.99,40.54
+114000,Interpret with temperature,100837.96,40.63
+115000,Interpret with temperature,100834.47,40.92
+116000,Interpret with temperature,100838.68,40.57
+117000,Interpret with temperature,100832.93,41.05
+118000,Interpret with temperature,100836.23,40.77
+119000,Interpret with temperature,100835.46,40.84
