@@ -6,7 +6,7 @@ Summary 4 lines
 sensors used TRL-8 goals, setup steps
 
 ```  
-/Project Name/
+SensoHealth
 ├── README.md
 ├── hardware/
 │   ├── circuit_diagram.png
