@@ -23,7 +23,7 @@ It integrates:
 
 - **MAX30102** – Heart Rate & SpO₂  
 - **AD8232** – ECG monitoring  
-- **LM35** – Body temperature  
+- **DS18B20** –  temperature  
 - **BMP280** – Barometric pressure & altitude  
 - **ADXL345** – Fall detection via accelerometer  
 - **MQ135** – Air quality (gas sensor)  
