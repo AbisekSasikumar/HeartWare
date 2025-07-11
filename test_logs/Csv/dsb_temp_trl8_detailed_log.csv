@@ -1,0 +1,121 @@
+Timestamp (ms),Test Stage,Body Temperature (°C)
+0,Check pressure during elevation change,37.12
+1000,Check pressure during elevation change,37.21
+2000,Check pressure during elevation change,37.04
+3000,Check pressure during elevation change,37.0
+4000,Check pressure during elevation change,36.98
+5000,Check pressure during elevation change,36.88
+6000,Check pressure during elevation change,37.13
+7000,Check pressure during elevation change,36.93
+8000,Check pressure during elevation change,36.92
+9000,Check pressure during elevation change,37.02
+10000,Climbing stairs,36.78
+11000,Climbing stairs,36.65
+12000,Climbing stairs,36.53
+13000,Climbing stairs,36.56
+14000,Climbing stairs,36.69
+15000,Climbing stairs,36.61
+16000,Climbing stairs,36.55
+17000,Climbing stairs,36.61
+18000,Climbing stairs,36.71
+19000,Climbing stairs,36.83
+20000,Test indoor vs outdoor difference,36.4
+21000,Test indoor vs outdoor difference,36.47
+22000,Test indoor vs outdoor difference,36.45
+23000,Test indoor vs outdoor difference,36.29
+24000,Test indoor vs outdoor difference,36.44
+25000,Test indoor vs outdoor difference,36.43
+26000,Test indoor vs outdoor difference,36.64
+27000,Test indoor vs outdoor difference,36.52
+28000,Test indoor vs outdoor difference,36.37
+29000,Test indoor vs outdoor difference,36.59
+30000,Measure transition,35.91
+31000,Measure transition,35.77
+32000,Measure transition,35.88
+33000,Measure transition,35.88
+34000,Measure transition,35.85
+35000,Measure transition,35.94
+36000,Measure transition,35.72
+37000,Measure transition,35.91
+38000,Measure transition,36.04
+39000,Measure transition,36.03
+40000,Compare with GPS altitude,36.53
+41000,Compare with GPS altitude,36.53
+42000,Compare with GPS altitude,36.57
+43000,Compare with GPS altitude,36.3
+44000,Compare with GPS altitude,36.5
+45000,Compare with GPS altitude,36.23
+46000,Compare with GPS altitude,36.36
+47000,Compare with GPS altitude,36.23
+48000,Compare with GPS altitude,36.52
+49000,Compare with GPS altitude,36.55
+50000,Cross-check GPS,36.37
+51000,Cross-check GPS,36.57
+52000,Cross-check GPS,36.33
+53000,Cross-check GPS,36.41
+54000,Cross-check GPS,36.41
+55000,Cross-check GPS,36.29
+56000,Cross-check GPS,36.44
+57000,Cross-check GPS,36.59
+58000,Cross-check GPS,36.29
+59000,Cross-check GPS,36.48
+60000,Introduce temperature swing,36.46
+61000,Introduce temperature swing,36.65
+62000,Introduce temperature swing,36.52
+63000,Introduce temperature swing,36.54
+64000,Introduce temperature swing,36.54
+65000,Introduce temperature swing,36.5
+66000,Introduce temperature swing,36.34
+67000,Introduce temperature swing,36.61
+68000,Introduce temperature swing,36.34
+69000,Introduce temperature swing,36.5
+70000,Temperature change effect,36.37
+71000,Temperature change effect,36.23
+72000,Temperature change effect,36.33
+73000,Temperature change effect,36.43
+74000,Temperature change effect,36.31
+75000,Temperature change effect,36.22
+76000,Temperature change effect,36.02
+77000,Temperature change effect,36.21
+78000,Temperature change effect,36.25
+79000,Temperature change effect,36.26
+80000,Apply smoothing,36.39
+81000,Apply smoothing,36.52
+82000,Apply smoothing,36.43
+83000,Apply smoothing,36.48
+84000,Apply smoothing,36.55
+85000,Apply smoothing,36.4
+86000,Apply smoothing,36.46
+87000,Apply smoothing,36.7
+88000,Apply smoothing,36.57
+89000,Apply smoothing,36.36
+90000,Noise reduction via filter,36.35
+91000,Noise reduction via filter,36.41
+92000,Noise reduction via filter,36.48
+93000,Noise reduction via filter,36.37
+94000,Noise reduction via filter,36.3
+95000,Noise reduction via filter,36.28
+96000,Noise reduction via filter,36.42
+97000,Noise reduction via filter,36.39
+98000,Noise reduction via filter,36.31
+99000,Noise reduction via filter,36.34
+100000,Baseline calibration,36.06
+101000,Baseline calibration,36.18
+102000,Baseline calibration,36.04
+103000,Baseline calibration,36.15
+104000,Baseline calibration,36.19
+105000,Baseline calibration,36.15
+106000,Baseline calibration,36.02
+107000,Baseline calibration,36.24
+108000,Baseline calibration,36.04
+109000,Baseline calibration,36.15
+110000,Interpret with temperature,36.69
+111000,Interpret with temperature,36.59
+112000,Interpret with temperature,36.79
+113000,Interpret with temperature,36.79
+114000,Interpret with temperature,36.76
+115000,Interpret with temperature,36.79
+116000,Interpret with temperature,36.7
+117000,Interpret with temperature,36.69
+118000,Interpret with temperature,36.75
+119000,Interpret with temperature,36.96
