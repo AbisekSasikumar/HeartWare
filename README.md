@@ -83,7 +83,7 @@ All components were purchased from [Robu.in](https://robu.in).
 
 ## 4. Pinout Table
 
-<h3>📌 Sensor-to-ESP32 Pin Mapping</h3>
+
 
 <table>
   <thead>
@@ -118,7 +118,7 @@ All components were purchased from [Robu.in](https://robu.in).
 ## 5. Pinout diagram
 ![Circuit Diagram](hardware/circuit_diagram.png)
 
-> **Note:** This circuit diagram was created using circuito.io. Since the platform does not offer an AD8232 component, an equivalent substitute is shown in the diagram for illustration purposes.
+
 
 ## 6. Working code
 
@@ -320,4 +320,4 @@ pip install -r requirements.txt
 
 ## 7. Test Results
 
-Detailed test logs and summaries are available [here ➜ test_logs/summary](test_logs).
+Detailed test logs and summaries are available [➜ test_logs](test_logs).

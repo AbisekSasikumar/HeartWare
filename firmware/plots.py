@@ -14,6 +14,7 @@ fig, ax = plt.subplots()
 window_size = 300  # Increase window size for smoother ECG
 ecg_buffer = deque([0] * window_size, maxlen=window_size)
 
+
 # ==== BANDPASS FILTER (0.5Hz - 50Hz for ECG) ====
 def bandpass_filter(data, lowcut=0.5, highcut=50.0, fs=200, order=2):
     nyq = 0.5 * fs
