@@ -1,3 +1,4 @@
+
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <Wire.h>
@@ -11,8 +12,8 @@
 #define ECG_PIN 34
 
 // 📶 WiFi & ThingSpeak
-const char* ssid = "Hathway";
-const char* password = "abisek007";
+const char* ssid = "POCO X2";
+const char* password = "1234567a";
 const char* THINGSPEAK_API_KEY = "67DEWBO770UKV585";
 const char* THINGSPEAK_URL = "https://api.thingspeak.com/update";
 
