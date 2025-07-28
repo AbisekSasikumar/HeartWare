@@ -1,128 +1,3 @@
-# SensoHealth
-Comprehensive Health Monitoring System with environmental alerts, emergency ECG access, fall detection , pressure contextualization
-
-## Table of Contents
-
-
-### 📑 Table of Contents
-
-1. [Introduction](#1-introduction)  
-2. [RepoStructure](#2-repostructure)  
-3. [Components with BOM](#3-components-with-bom)  
-4. [Pinout Table](#4-pinout-table)  
-5. [Pinout Diagram](#5-pinout-diagram)  
-6. [Working Code](#6-working-code)  
-7. [Test Results](#7-test-results)
-
- 
-## 1. Introduction
-
-The **Smart Health Monitoring System** is a **real-time, multi-sensor platform** built around the **ESP32 microcontroller**, designed for continuous tracking of key **physiological** and **environmental** parameters.
-
-It integrates:
-
-- **MAX30102** – Heart Rate & SpO₂  
-- **AD8232** – ECG monitoring  
-- **DS18B20** –  temperature  
-- **BMP280** – Barometric pressure & altitude  
-- **ADXL345** – Fall detection via accelerometer  
-- **MQ135** – Air quality (gas sensor)  
-
-Sensor data is:
-
-- Sent to the **ThingSpeak cloud** (all 8 fields used)  
-- Streamed via **serial** to a **PC**, where dedicated **Python scripts** log each sensor's data to **CSV files** (saved to **OneDrive Desktop** for easy access)
-
-Critical events (e.g., **SpO₂ < 90%**, **HR > 120 bpm**, **fall detection**) trigger **real-time alerts via Telegram Bot**.
-
-To achieve **Technology Readiness Level 8 (TRL 8)**:
-
-- Each sensor was **individually validated** via Arduino and Python  
-- **24-hour tests** were performed for stability and drift  
-- **Fall tests** and **stress testing** confirmed system reliability  
-- Scripts handle **noise filtering**, **auto file creation**, and **safe data appending**
-
-This system is ideal for **remote patient monitoring**, **elderly care**, **telehealth**, and **academic research**, and is **ready for deployment** in real-world scenarios.
-
-📄 [View Detailed Summary](test_logs/Summary.txt)
-
-
-## 2. RepoStructure
-
-```  
-SensoHealth
-├── README.md
-├── hardware/
-│   ├── circuit_diagram.png
-│   ├── pin_mapping.txt
-│   └── components.list.md
-├── firmware/
-│   ├── src/
-│   ├── plots.py
-├── test_logs/
-│   ├── csv_files
-│   └── screenshots/
-└── demo/
-    └── demo_video.mp4
-```
-## 3. Components with BOM
-
-All components were purchased from [Robu.in](https://robu.in).
-
-| S.No | Component                                      | Quantity | Price (₹) |
-|------|------------------------------------------------|----------|-----------|
-| 1    | **ESP32 (38 Pin) WiFi + Bluetooth Board**      | 1        | ₹354      |
-| 2    | **MAX30102 Pulse Oximeter Sensor**             | 1        | ₹104      |
-| 3    | **AD8232 ECG Sensor Module**                   | 1        | ₹406      |
-| 4    | **ADXL345 Accelerometer Module**               | 1        | ₹177      |
-| 5    | **DS18B20 Waterproof Temperature Sensor**      | 1        | ₹64       |
-| 6    | **MQ-135 Gas Sensor**                          | 1        | ₹129      |
-| 7    | **Male to Female Jumper Wires (20cm) 40 pcs**  | 1 Set    | ₹41       |
-|      | **💰 Total**                                    |          | **₹1,275** |
-
-
-## 4. Pinout Table
-
-
-
-<table>
-  <thead>
-    <tr>
-      <th>ESP32 Pin</th>
-      <th>MAX30105</th>
-      <th>DS18B20</th>
-      <th>MQ-135</th>
-      <th>ADXL345</th>
-      <th>AD8232</th>
-      <th>BMP280</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr><td><strong>GPIO 4</strong></td><td>–</td><td><strong>🟢 Data</strong></td><td>–</td><td>–</td><td>–</td><td>–</td></tr>
-    <tr><td><strong>GPIO 16</strong></td><td>–</td><td>–</td><td>–</td><td><strong>🟢 INT</strong></td><td>–</td><td>–</td></tr>
-    <tr><td><strong>GPIO 17</strong></td><td><strong>🟢 INT</strong></td><td>–</td><td>–</td><td>–</td><td>–</td><td>–</td></tr>
-    <tr><td><strong>GPIO 21</strong></td><td><strong>🟢 SDA</strong></td><td>–</td><td>–</td><td><strong>🟢 SDA</strong></td><td>–</td><td><strong>🟢 SDA</strong></td></tr>
-    <tr><td><strong>GPIO 22</strong></td><td><strong>🟢 SCL</strong></td><td>–</td><td>–</td><td><strong>🟢 SCL</strong></td><td>–</td><td><strong>🟢 SCL</strong></td></tr>
-    <tr><td><strong>GPIO 32</strong></td><td>–</td><td>–</td><td>–</td><td>–</td><td><strong>🟢 LO+</strong></td><td>–</td></tr>
-    <tr><td><strong>GPIO 33</strong></td><td>–</td><td>–</td><td>–</td><td>–</td><td><strong>🟢 LO−</strong></td><td>–</td></tr>
-    <tr><td><strong>GPIO 34</strong></td><td>–</td><td>–</td><td><strong>🟢 Analog Out</strong></td><td>–</td><td>–</td><td>–</td></tr>
-    <tr><td><strong>GPIO 35</strong></td><td>–</td><td>–</td><td>–</td><td>–</td><td><strong>🟢 ECG</strong></td><td>–</td></tr>
-    <tr><td><strong>3.3V</strong></td><td><strong>🟢 VCC</strong></td><td><strong>🟢 VCC</strong></td><td>–</td><td><strong>🟢 VCC</strong></td><td><strong>🟢 VCC</strong></td><td><strong>🟢 VCC</strong></td></tr>
-    <tr><td><strong>5V</strong></td><td>–</td><td>–</td><td><strong>🟢 VCC</strong></td><td>–</td><td>–</td><td>–</td></tr>
-    <tr><td><strong>GND</strong></td><td><strong>🟢 GND</strong></td><td><strong>🟢 GND</strong></td><td><strong>🟢 GND</strong></td><td><strong>🟢 GND</strong></td><td><strong>🟢 GND</strong></td><td><strong>🟢 GND</strong></td></tr>
-  </tbody>
-</table>
-
-
-
-## 5. Pinout diagram
-![Circuit Diagram](hardware/circuit_diagram.png)
-
-
-
-## 6. Working code
-
-```cpp
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <Wire.h>
@@ -135,15 +10,16 @@ All components were purchased from [Robu.in](https://robu.in).
 #include <DallasTemperature.h>
 
 // ===== WiFi and ThingSpeak =====
-const char* ssid = "POCO X2";
-const char* password = "1234567a";
-const char* THINGSPEAK_API_KEY = "67DEWBO770UKV585";
+const char* ssid = "Your SSID"; // Replace with your WiFi SSID
+const char* password = "Your Password"; // Replace with your WiFi Password
+// ThingSpeak API Key and URL
+const char* THINGSPEAK_API_KEY = "API_Key"; // Replace with your ThingSpeak API Key
 const char* THINGSPEAK_URL = "https://api.thingspeak.com/update";
 
 // ===== Telegram Bot (Optional) =====
-String TELEGRAM_BOT_TOKEN = "8132613555:AAEJDurOpSTQKHPAzIp0LwdZlynFW7u5Uq8";
+String TELEGRAM_BOT_TOKEN = "YOUR_BOT_TOKEN"; // Replace with your Telegram Bot Token
  // Replace
-String TELEGRAM_CHAT_ID = "1126113455";
+String TELEGRAM_CHAT_ID = "YOUR_CHAT_ID"; // Replace with your Telegram chat ID
      // Replace
 
 // ===== Pins =====
@@ -338,14 +214,3 @@ void uploadThingSpeak(float temp, float spo2, float hr, float pressure, float al
   Serial.println(code > 0 ? "✅ Sent to ThingSpeak" : "❌ ThingSpeak Error");
   http.end();
 }
-```
-
-Run this command before running the plots.py file in firmware folder
-
-```
-pip install -r requirements.txt
-```
-
-## 7. Test Results
-
-Detailed test logs and summaries are available [➜ test_logs](test_logs).

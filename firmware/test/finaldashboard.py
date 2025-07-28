@@ -12,7 +12,7 @@ from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtGui import QFont, QColor, QPalette
 
 # === CONFIG ===
-PORT = "COM4"       # ← Replace with your actual COM port
+PORT = "COM3"       # ← Replace with your actual COM port
 BAUD = 115200
 CSV_FILE = "health_log.csv"
 MAX_POINTS = 500
