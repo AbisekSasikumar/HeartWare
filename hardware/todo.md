@@ -8,12 +8,11 @@
 - [ ] Clean and comment Python/Arduino code 
 
 ## Repository 
-- [ ] remove unwanted folders
-- [ x ] update `requirements.txt` and `.gitignore`
+- [x] remove unwanted folders
+- [x] update `requirements.txt` and `.gitignore`
 //gitignore need to be done
 
 ## Documentation
 - [ ] Create a usage guide in `README.md` (.json file for new esp32 users- if time permits)
-- [ ] Mention **future upgrades**
+- [ ] Mention **future upgrades**,update summary,add workflow.
 
-Try b4 23-24
