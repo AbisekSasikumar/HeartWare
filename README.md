@@ -123,192 +123,220 @@ All components were purchased from [Robu.in](https://robu.in).
 ## 6. Working code
 
 ```cpp
-
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_ADXL345_U.h>
 #include <Adafruit_BMP280.h>
+#include <LiquidCrystal_I2C.h>
 #include "MAX30105.h"
+#include <OneWire.h>
+#include <DallasTemperature.h>
 
-// 🔌 Pin Definitions
-#define LM35_PIN 35
-#define ECG_PIN 34
-
-// 📶 WiFi & ThingSpeak
+// ===== WiFi and ThingSpeak =====
 const char* ssid = "POCO X2";
 const char* password = "1234567a";
 const char* THINGSPEAK_API_KEY = "67DEWBO770UKV585";
 const char* THINGSPEAK_URL = "https://api.thingspeak.com/update";
 
-// 📲 Telegram Bot
+// ===== Telegram Bot (Optional) =====
 String TELEGRAM_BOT_TOKEN = "8132613555:AAEJDurOpSTQKHPAzIp0LwdZlynFW7u5Uq8";
+ // Replace
 String TELEGRAM_CHAT_ID = "1126113455";
+     // Replace
 
-// 🧠 Sensor Objects
+// ===== Pins =====
+#define ECG_PIN 35
+#define MQ135_PIN 34
+#define DSB_PIN 27
+#define BUZZER_PIN 4
+#define BUTTON_PIN 5
+
+// ===== LCD & I2C =====
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+// ===== Sensor Objects =====
 MAX30105 max30102;
 Adafruit_BMP280 bmp;
 Adafruit_ADXL345_Unified accel = Adafruit_ADXL345_Unified(12345);
+OneWire oneWire(DSB_PIN);
+DallasTemperature dsbSensor(&oneWire);
 WiFiClient client;
 
-// 📲 Telegram Alert Function
-void sendTelegramAlert(String message) {
-  String url = "https://api.telegram.org/bot" + TELEGRAM_BOT_TOKEN +
-               "/sendMessage?chat_id=" + TELEGRAM_CHAT_ID +
-               "&text=" + message;
-  
-  HTTPClient http;
-  http.begin(url);
-  int httpResponseCode = http.GET();
+// ===== LCD and UI State =====
+int screenIndex = 0;
+bool alertActive = false;
+unsigned long alertStart = 0;
+const unsigned long alertDuration = 5000;
+bool lastButton = HIGH;
 
-  if (httpResponseCode > 0) {
-    Serial.println("✅ Telegram Alert Sent!");
-  } else {
-    Serial.println("❌ Telegram Error Code: " + String(httpResponseCode));
-  }
+// ===== Timing =====
+unsigned long lastThingSpeakTime = 0;
+const unsigned long THINGSPEAK_INTERVAL = 15000;
 
-  http.end();
-}
+// ===== Latest sensor values =====
+float last_hr = 0, last_spo2 = 0, last_temp = 0;
+float last_pressure = 0, last_alt = 0;
+float last_accX = 0, last_accY = 0, last_accZ = 0;
+int last_mq = 0;
 
-// ☁ ThingSpeak Function
-void sendDataToThingSpeak(float temperature, float spo2, float heartRate, float pressure, float altitude, float accX, float accY, float accZ) {
-  if (WiFi.status() != WL_CONNECTED) {
-    Serial.println("❌ WiFi Disconnected, Skipping ThingSpeak");
-    return;
-  }
-
-  HTTPClient http;
-  String url = String(THINGSPEAK_URL) + "?api_key=" + THINGSPEAK_API_KEY +
-               "&field1=" + String(heartRate) +
-               "&field2=" + String(spo2) +
-               "&field3=" + String(temperature) +
-               "&field4=" + String(pressure) +
-               "&field5=" + String(altitude) +
-               "&field6=" + String(accX) +
-               "&field7=" + String(accY) +
-               "&field8=" + String(accZ);
-
-  http.begin(url);
-  int httpResponseCode = http.GET();
-
-  if (httpResponseCode > 0) {
-    Serial.println("✅ Data Sent to ThingSpeak!");
-  } else {
-    Serial.println("❌ ThingSpeak Error: " + String(httpResponseCode));
-  }
-
-  http.end();
-}
+// ===== Function Declarations =====
+void sendTelegram(String msg);
+void updateLCD(float hr, float spo2, float temp, float pressure, float alt, int mq, float ax, float ay, float az, String alertText);
+void uploadThingSpeak(float temp, float spo2, float hr, float pressure, float alt, float ax, float ay, float az);
 
 void setup() {
   Serial.begin(115200);
-  delay(1000);
+  lcd.init(); lcd.backlight();
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+  pinMode(BUZZER_PIN, OUTPUT); digitalWrite(BUZZER_PIN, LOW);
 
-  Serial.println("🔌 Starting...");
-
-  // 🔗 Connect WiFi
   WiFi.begin(ssid, password);
-  Serial.print("Connecting to WiFi");
-  while (WiFi.status() != WL_CONNECTED) {
+  unsigned long wifiStart = millis();
+  while (WiFi.status() != WL_CONNECTED && millis() - wifiStart < 10000) {
     delay(500); Serial.print(".");
   }
-  Serial.println("\n✅ WiFi Connected!");
+  Serial.println(WiFi.status() == WL_CONNECTED ? "\n✅ WiFi Connected" : "\n❌ WiFi Failed");
 
-  // 🧠 Sensor Init
-  Wire.begin();
-
-  if (!max30102.begin()) {
-    Serial.println("❌ MAX30102 Not Found!");
-  } else {
-    Serial.println("✅ MAX30102 Connected!");
-  }
-
-  if (!bmp.begin(0x76)) {
-    Serial.println("❌ BMP280 Not Found!");
-  } else {
-    Serial.println("✅ BMP280 Connected!");
-  }
-
-  if (!accel.begin()) {
-    Serial.println("❌ ADXL345 Not Found!");
-  } else {
-    Serial.println("✅ ADXL345 Connected!");
-  }
+  Wire.begin(21, 22);
+  if (!max30102.begin()) Serial.println("❌ MAX30102 Not Found");
+  if (!bmp.begin(0x76)) Serial.println("❌ BMP280 Not Found");
+  if (!accel.begin()) Serial.println("❌ ADXL345 Not Found");
+  dsbSensor.begin();
 }
 
 void loop() {
-  Serial.println("🔁 Starting Loop...");
-
-  // ECG Reading (for plotting)
-  int ecgValue = analogRead(ECG_PIN);
-  Serial.print("📈 ECG: "); Serial.println(ecgValue);
-
-  // LM35 Temp
-  float voltage = analogRead(LM35_PIN) * (3.3 / 4095.0);
-  float temperature = voltage * 100.0;
-  Serial.print("🌡 Temperature: "); Serial.println(temperature);
-
-  // MAX30102 Data
-  int ir = max30102.getIR();
-  int red = max30102.getRed();
-
-  float spo2 = 0.0;
-  float heartRate = 0.0;
-  if (ir > 1000 && red > 0) {
-    spo2 = (float)red / ir * 100.0;
-    heartRate = 60.0 / (ir / 1000.0);  // Dummy calc
-  } else {
-    Serial.println("⚠ MAX30102 readings too low");
-    spo2 = 98.0;
-    heartRate = 75.0;
+  // === Push Button Handling ===
+  bool currentButton = digitalRead(BUTTON_PIN);
+  if (lastButton == HIGH && currentButton == LOW) {
+    screenIndex = (screenIndex + 1) % 3;
+    lcd.clear();
   }
-  Serial.print("❤ HR: "); Serial.print(heartRate);
-  Serial.print(" bpm | SpO2: "); Serial.print(spo2); Serial.println("%");
+  lastButton = currentButton;
 
-  // BMP280 Data
-  float pressure = bmp.readPressure() / 100.0;
-  float altitude = bmp.readAltitude(1013.25);
-  Serial.print("📊 Pressure: "); Serial.println(pressure);
-  Serial.print("🗻 Altitude: "); Serial.println(altitude);
+  // === Read Sensors Once Per Loop ===
+  int ecg = analogRead(ECG_PIN);
+  dsbSensor.requestTemperatures();
+  last_temp = dsbSensor.getTempCByIndex(0);
 
-  // ADXL345 Data
+  long ir = max30102.getIR();
+  long red = max30102.getRed();
+  last_spo2 = (ir > 1000) ? red * 100.0 / ir : 98.0;
+  last_hr = (ir > 1000) ? 60.0 / (ir / 1000.0) : 75.0;
+
+  last_pressure = bmp.readPressure() / 100.0;
+  last_alt = bmp.readAltitude(1013.25);
+
   sensors_event_t event;
   accel.getEvent(&event);
-  float accX = event.acceleration.x;
-  float accY = event.acceleration.y;
-  float accZ = event.acceleration.z;
-  Serial.print("🧭 Acc X: "); Serial.println(accX);
-  Serial.print("🧭 Acc Y: "); Serial.println(accY);
-  Serial.print("🧭 Acc Z: "); Serial.println(accZ);
+  last_accX = event.acceleration.x;
+  last_accY = event.acceleration.y;
+  last_accZ = event.acceleration.z;
 
-  // ⚠ Alerts
-  if (spo2 < 90) {
-    sendTelegramAlert("⚠ Low SpO2: " + String(spo2) + "%");
-  }
-  if (heartRate > 120) {
-    sendTelegramAlert("⚠ High Heart Rate: " + String(heartRate) + " bpm");
-  }
-  if (abs(accX) > 10 || abs(accY) > 10 || abs(accZ) < 2) {
-    sendTelegramAlert("⚠ Possible Fall! Accel: X=" + String(accX) + " Y=" + String(accY) + " Z=" + String(accZ));
-  }
+  last_mq = analogRead(MQ135_PIN);
 
-  // 📡 ThingSpeak Upload
-  sendDataToThingSpeak(temperature, spo2, heartRate, pressure, altitude, accX, accY, accZ);
-
-  // 🐍 Python Serial
+  // === Serial Output to Python (Fast) ===
+   
   Serial.print("PYTHON-> ");
-  Serial.print(heartRate); Serial.print(",");
-  Serial.print(spo2); Serial.print(",");
-  Serial.print(temperature); Serial.print(",");
-  Serial.print(pressure); Serial.print(",");
-  Serial.print(altitude); Serial.print(",");
-  Serial.print(accX); Serial.print(",");
-  Serial.print(accY); Serial.print(",");
-  Serial.println(accZ);
+  Serial.print(last_hr); Serial.print(",");
+  Serial.print(last_spo2); Serial.print(",");
+  Serial.print(last_temp); Serial.print(",");
+  Serial.print(last_pressure); Serial.print(",");
+  Serial.print(last_alt); Serial.print(",");
+  Serial.print(last_accX); Serial.print(",");
+  Serial.print(last_accY); Serial.print(",");
+  Serial.print(last_accZ); Serial.print(",");
+  Serial.print(last_mq);Serial.print(",");
+   Serial.println(ecg);
 
-  Serial.println("✅ Loop Complete\n");
-  delay(15000);  // 15s delay for ThingSpeak
+  // === Alert Detection ===
+  String alertMsg = "";
+  if (last_spo2 < 90) alertMsg = "Low SpO2";
+  else if (last_hr > 120) alertMsg = "High HR";
+  else if (last_mq > 900) alertMsg = "Air Bad";
+  else if (abs(last_accX) > 10 || abs(last_accY) > 10 || abs(last_accZ) < 2) alertMsg = "Fall Detected";
+
+  if (alertMsg != "") sendTelegram("⚠ " + alertMsg);
+
+  // === LCD Update ===
+  updateLCD(last_hr, last_spo2, last_temp, last_pressure, last_alt, last_mq, last_accX, last_accY, last_accZ, alertMsg);
+
+  // === ThingSpeak Upload every 15s (using last values) ===
+  if (millis() - lastThingSpeakTime > THINGSPEAK_INTERVAL) {
+    uploadThingSpeak(last_temp, last_spo2, last_hr, last_pressure, last_alt, last_accX, last_accY, last_accZ);
+    lastThingSpeakTime = millis();
+  }
+
+  // Loop runs fast — no delay
+}
+
+// ===== Send to Telegram (optional) =====
+void sendTelegram(String msg) {
+  if (TELEGRAM_BOT_TOKEN == "YOUR_BOT_TOKEN") return;
+  String url = "https://api.telegram.org/bot" + TELEGRAM_BOT_TOKEN +
+               "/sendMessage?chat_id=" + TELEGRAM_CHAT_ID + "&text=" + msg;
+  HTTPClient http;
+  http.begin(url);
+  int code = http.GET();
+  Serial.println(code > 0 ? "✅ Telegram Sent!" : "❌ Telegram Failed!");
+  http.end();
+}
+
+// ===== Update LCD Display =====
+void updateLCD(float hr, float spo2, float temp, float pressure, float alt, int mq, float ax, float ay, float az, String alertText = "") {
+  if (alertText != "") {
+    lcd.clear();
+    lcd.setCursor(0, 0); lcd.print("⚠ ALERT:");
+    lcd.setCursor(0, 1); lcd.print(alertText.substring(0, 16));
+    digitalWrite(BUZZER_PIN, HIGH);
+    alertStart = millis();
+    alertActive = true;
+    return;
+  }
+
+  if (alertActive && millis() - alertStart > alertDuration) {
+    alertActive = false;
+    digitalWrite(BUZZER_PIN, LOW);
+    lcd.clear();
+  }
+
+  if (alertActive) return;
+
+  lcd.clear();
+  switch (screenIndex) {
+    case 0:
+      lcd.setCursor(0, 0); lcd.print("HR:"); lcd.print(hr, 0); lcd.print(" SpO2:"); lcd.print(spo2, 0);
+      lcd.setCursor(0, 1); lcd.print("Temp:"); lcd.print(temp, 1); lcd.print("C");
+      break;
+    case 1:
+      lcd.setCursor(0, 0); lcd.print("Pres:"); lcd.print(pressure, 0); lcd.print("hPa");
+      lcd.setCursor(0, 1); lcd.print("Alt:"); lcd.print(alt, 0); lcd.print(" MQ:"); lcd.print(mq);
+      break;
+    case 2:
+      lcd.setCursor(0, 0); lcd.print("AccX:"); lcd.print(ax, 1); lcd.print(" Y:"); lcd.print(ay, 1);
+      lcd.setCursor(0, 1); lcd.print("Z:"); lcd.print(az, 1);
+      break;
+  }
+}
+
+// ===== ThingSpeak Uploader =====
+void uploadThingSpeak(float temp, float spo2, float hr, float pressure, float alt, float ax, float ay, float az) {
+  if (WiFi.status() != WL_CONNECTED) return;
+  String url = String(THINGSPEAK_URL) + "?api_key=" + THINGSPEAK_API_KEY +
+               "&field1=" + String(hr) +
+               "&field2=" + String(spo2) +
+               "&field3=" + String(temp) +
+               "&field4=" + String(pressure) +
+               "&field5=" + String(alt) +
+               "&field6=" + String(ax) +
+               "&field7=" + String(ay) +
+               "&field8=" + String(az);
+  HTTPClient http;
+  http.begin(url);
+  int code = http.GET();
+  Serial.println(code > 0 ? "✅ Sent to ThingSpeak" : "❌ ThingSpeak Error");
+  http.end();
 }
 ```
 

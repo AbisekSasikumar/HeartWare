@@ -1,4 +1,5 @@
-pyserial
+pyqt5
+pyqtgraph
 numpy
-matplotlib
-scipy
+requests
+pyserial
